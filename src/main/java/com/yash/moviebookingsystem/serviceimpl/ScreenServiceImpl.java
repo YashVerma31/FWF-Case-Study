@@ -1,9 +1,13 @@
 package com.yash.moviebookingsystem.serviceimpl;
 
 import java.util.List;
+import java.util.Map;
 
 import com.yash.moviebookingsystem.dao.ScreenDAO;
+import com.yash.moviebookingsystem.exception.NullFieldException;
 import com.yash.moviebookingsystem.exception.NullScreenNameException;
+import com.yash.moviebookingsystem.model.Movie;
+import com.yash.moviebookingsystem.model.Row;
 import com.yash.moviebookingsystem.model.Screen;
 import com.yash.moviebookingsystem.service.ScreenService;
 
@@ -22,7 +26,8 @@ public class ScreenServiceImpl implements ScreenService {
 		if (ListOfScreen.size() < 3) {
 			for (Screen singleScreen : ListOfScreen) {
 				if (singleScreen.getScreenName().equalsIgnoreCase(screen.getScreenName()))
-					break;
+					System.out.println("Screen Name Already Exist");
+				break;
 
 			}
 			isAdded = screenDAO.insert(screen);
@@ -35,5 +40,71 @@ public class ScreenServiceImpl implements ScreenService {
 			throw new NullScreenNameException("Cannot add an empty screen name or null value");
 		}
 		return true;
+	}
+
+	public boolean addMovieToScreen(String screenName, Movie movie) {
+		checkForNullMovie(movie);
+		boolean movieAddedStatus = false;
+		List<Screen> screens = screenDAO.getScreenList();
+		for (Screen screen : screens) {
+			if (screen.getSeatingArrangement() != null) {
+				movieAddedStatus = isScreenExistBeforeAddingTheMovie(screenName, movie, movieAddedStatus, screen);
+			} else {
+				System.out.println("First design Seating for Given Screen : " + screenName);
+				break;
+			}
+		}
+		updateScreens(movieAddedStatus, screens);
+		return movieAddedStatus;
+	}
+
+	private void updateScreens(boolean status, List<Screen> screens) {
+		if (status) {
+			screenDAO.updateScreens(screens);
+		}
+	}
+
+	private boolean isScreenExistBeforeAddingTheMovie(String screenName, Movie movie, boolean movieAddedStatus,
+			Screen screen) {
+		if (isScreenNameExist(screenName, screen)) {
+			screen.setMovie(movie);
+			movieAddedStatus = true;
+		} else {
+			System.out.println("Screen not found");
+		}
+		return movieAddedStatus;
+	}
+
+	private void checkForNullMovie(Movie movie) {
+		if (movie == null) {
+			throw new NullFieldException("Null value of movie can not be added");
+		}
+	}
+
+	public boolean addSeatsToScreen(Map<String, List<Row>> seatList, String screenName) {
+		boolean isSeatsAdded = false;
+		checkForNullSeatingObject(seatList);
+		if (seatList.size() == 3) {
+			List<Screen> screens = screenDAO.getScreenList();
+			for (Screen screen : screens) {
+				if (isScreenNameExist(screenName, screen)) {
+					screen.setSeatingArrangement(seatList);
+					isSeatsAdded = true;
+					break;
+				}
+			}
+			updateScreens(isSeatsAdded, screens);
+		}
+		return isSeatsAdded;
+	}
+
+	private boolean isScreenNameExist(String screenName, Screen screen) {
+		return screen.getScreenName().equalsIgnoreCase(screenName);
+	}
+
+	private void checkForNullSeatingObject(Map<String, List<Row>> seatings) {
+		if (seatings == null) {
+			throw new NullFieldException("Can't Add Null Field of Seat Object");
+		}
 	}
 }

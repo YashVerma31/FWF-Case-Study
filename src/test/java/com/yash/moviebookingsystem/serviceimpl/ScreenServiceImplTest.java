@@ -6,16 +6,20 @@ import static org.mockito.Mockito.when;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.LinkedHashMap;
 import java.util.List;
 
 import org.junit.Test;
 
 import com.yash.moviebookingsystem.dao.ScreenDAO;
 import com.yash.moviebookingsystem.exception.NullScreenNameException;
+import com.yash.moviebookingsystem.model.Movie;
+import com.yash.moviebookingsystem.model.Row;
 import com.yash.moviebookingsystem.model.Screen;
 import com.yash.moviebookingsystem.service.ScreenService;
 
 public class ScreenServiceImplTest {
+
 	private ScreenDAO screenDAO = mock(ScreenDAO.class);
 	private ScreenService screenService = new ScreenServiceImpl(screenDAO);
 
@@ -56,6 +60,39 @@ public class ScreenServiceImplTest {
 		when(screenDAO.getScreenList()).thenReturn(screenList);
 		when(screenDAO.insert(screen)).thenReturn(0);
 		assertEquals(0, screenService.addNewScreen(screen));
+	}
+
+	@Test
+	public void addMovieToScreen_WhenNoSeatingArragementAvailable_ShouldReturnFalse() {
+		Movie movie = new Movie(123, "bajirao", "02:30", "ABC production", Arrays.asList("Ranveer Singh"));
+		List<Screen> screens = Arrays.asList(new Screen("screen 1"), new Screen("screen 2"), new Screen("Audi-3"));
+		when(screenDAO.getScreenList()).thenReturn(screens);
+		when(screenDAO.updateScreens(screens)).thenReturn(true);
+		assertFalse(screenService.addMovieToScreen("Audi-3", movie));
+	}
+
+	@Test
+	public void addMovieToScreen_WhenScreenNotAvailable_ShouldReturnFalse() {
+		Movie movie = new Movie(123, "bajirao", "02:30", "ABC production", Arrays.asList("Ranveer Singh"));
+		Screen screen = new Screen();
+		screen.setScreenName("screen 1");
+		screen.setSeatingArrangement(new LinkedHashMap<String, List<Row>>());
+		List<Screen> screens = Arrays.asList(screen);
+		when(screenDAO.getScreenList()).thenReturn(screens);
+		when(screenDAO.updateScreens(screens)).thenReturn(true);
+		assertFalse(screenService.addMovieToScreen("Audi-3", movie));
+	}
+
+	@Test
+	public void addMovieToScreen_WhenObjectIsGiven_ShouldAddMoveToScreenAndReturnTrue() {
+		Movie movie = new Movie(123, "bajirao", "02:30", "ABC production", Arrays.asList("Ranveer Singh"));
+		Screen screen = new Screen();
+		screen.setScreenName("Audi-1");
+		screen.setSeatingArrangement(new LinkedHashMap<String, List<Row>>());
+		List<Screen> screens = Arrays.asList(screen);
+		when(screenDAO.getScreenList()).thenReturn(screens);
+		when(screenDAO.updateScreens(screens)).thenReturn(true);
+		assertTrue(screenService.addMovieToScreen("Audi-1", movie));
 	}
 
 }
