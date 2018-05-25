@@ -8,10 +8,12 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.junit.Test;
 
 import com.yash.moviebookingsystem.dao.ScreenDAO;
+import com.yash.moviebookingsystem.exception.NullFieldException;
 import com.yash.moviebookingsystem.exception.NullScreenNameException;
 import com.yash.moviebookingsystem.model.Movie;
 import com.yash.moviebookingsystem.model.Row;
@@ -93,6 +95,41 @@ public class ScreenServiceImplTest {
 		when(screenDAO.getScreenList()).thenReturn(screens);
 		when(screenDAO.updateScreens(screens)).thenReturn(true);
 		assertTrue(screenService.addMovieToScreen("Audi-1", movie));
+	}
+
+	@Test(expected = NullFieldException.class)
+	public void addSeatingsToScreen_WhenNullIsGiven_ThrowNullException() {
+		screenService.addSeatsToScreen(null, "Audi- 1");
+	}
+
+	@Test
+	public void addSeatingsToScreen_WhenInvalidObjectIsGiven_ShouldNotAddSeatingAndReturnFalse() {
+		Map<String, List<Row>> seating = new LinkedHashMap<>();
+		seating.put("gold", new ArrayList<Row>());
+		screenService.addSeatsToScreen(seating, "Audi- 1");
+	}
+
+	@Test
+	public void addSeatingsToScreen_WhenValidObjectAndInValidScreenNameIsGiven_ShouldNotAddSeatingAndReturnFalse() {
+		Map<String, List<Row>> seating = new LinkedHashMap<>();
+		seating.put("premium", new ArrayList<Row>());
+		seating.put("silver", new ArrayList<Row>());
+		seating.put("gold", new ArrayList<Row>());
+		List<Screen> screens = Arrays.asList(new Screen("Audi-1"), new Screen("Audi-2"), new Screen("Audi-3"));
+		when(screenDAO.getScreenList()).thenReturn(screens);
+		assertFalse(screenService.addSeatsToScreen(seating, "Audi- 4"));
+	}
+
+	@Test
+	public void addSeatingsToScreen_WhenValidObjectAndScreenNameIsGiven_ShouldAddSeatingAndReturnTrue() {
+		Map<String, List<Row>> seating = new LinkedHashMap<>();
+		seating.put("premium", new ArrayList<Row>());
+		seating.put("silver", new ArrayList<Row>());
+		seating.put("gold", new ArrayList<Row>());
+		List<Screen> screens = Arrays.asList(new Screen("Audi-1"), new Screen("Audi-2"), new Screen("Audi-3"));
+		when(screenDAO.getScreenList()).thenReturn(screens);
+		when(screenDAO.updateScreens(screens)).thenReturn(true);
+		assertTrue(screenService.addSeatsToScreen(seating, "Audi-1"));
 	}
 
 }
