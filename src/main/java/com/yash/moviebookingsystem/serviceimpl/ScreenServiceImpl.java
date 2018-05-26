@@ -83,7 +83,7 @@ public class ScreenServiceImpl implements ScreenService {
 
 	public boolean addSeatsToScreen(Map<String, List<Row>> seatList, String screenName) {
 		boolean isSeatsAdded = false;
-		checkForNullSeatingObject(seatList);
+		checkForNullSeatObject(seatList);
 		if (seatList.size() == 3) {
 			List<Screen> screens = screenDAO.getScreenList();
 			for (Screen screen : screens) {
@@ -102,9 +102,20 @@ public class ScreenServiceImpl implements ScreenService {
 		return screen.getScreenName().equalsIgnoreCase(screenName);
 	}
 
-	private void checkForNullSeatingObject(Map<String, List<Row>> seatings) {
-		if (seatings == null) {
+	private void checkForNullSeatObject(Map<String, List<Row>> seat) {
+		if (seat == null) {
 			throw new NullFieldException("Can't Add Null Field of Seat Object");
 		}
+	}
+
+	@Override
+	public List<Screen> getListOfScreen() {
+		return screenDAO.getScreenList();
+	}
+
+	@Override
+	public void updateListOfScreen(List<Screen> screenList) {
+		screenDAO.updateScreens(screenList);
+
 	}
 }

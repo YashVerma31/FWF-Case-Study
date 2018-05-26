@@ -15,4 +15,7 @@ public interface ScreenService {
 
 	boolean addSeatsToScreen(Map<String, List<Row>> seatList, String screenName);
 
+	List<Screen> getListOfScreen();
+
+	void updateListOfScreen(List<Screen> screenList);
 }
