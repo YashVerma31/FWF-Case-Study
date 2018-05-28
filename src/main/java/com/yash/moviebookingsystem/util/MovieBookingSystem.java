@@ -29,7 +29,7 @@ public class MovieBookingSystem {
 		do {
 			System.out.println("---------------- Movie Booking System ---------------");
 			System.out.println(
-					"1. Add Screen \n2. Add Seating Arrangement To Screen \n3. Add Movie To Screen \n4. Add Shows For Movie \n5.Book Tickets \n6. Cancel Booking \n7. Show availability \n8.Reports  \n0. Exit \n");
+					"1. Add Screen \n2. Add Seating Arrangement To Screen \n3. Add Movie To Screen \n4. Add Shows For Movie \n5. Book Tickets \n6. Cancel Booking \n7. Show availability \n8. Reports  \n0. Exit \n");
 			System.out.println("Enter Your Choice :-");
 			operatorInput = scannerInput.nextInt();
 			switch (operatorInput) {
