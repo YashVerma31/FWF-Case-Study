@@ -41,4 +41,9 @@ public class Row {
 	public void setSeatsInRow(List<Seat> seatsInRow) {
 		this.seatsInRow = seatsInRow;
 	}
+
+	@Override
+	public String toString() {
+		return "Row [id=" + id + ", rowIndex=" + rowIndex + ", seatsInRow=" + seatsInRow + "]";
+	}
 }

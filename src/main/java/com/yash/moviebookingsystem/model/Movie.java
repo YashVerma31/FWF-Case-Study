@@ -3,7 +3,7 @@ package com.yash.moviebookingsystem.model;
 import java.util.List;
 
 public class Movie {
-	
+
 	private int id;
 	private String title;
 	private String duration;
@@ -17,6 +17,9 @@ public class Movie {
 		this.duration = duration;
 		this.production = production;
 		this.actors = actors;
+	}
+
+	public Movie() {
 	}
 
 	public int getId() {

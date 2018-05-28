@@ -12,6 +12,9 @@ public class ScreenDAOImpl implements ScreenDAO {
 
 	private List<Screen> screenList = null;
 
+	public ScreenDAOImpl() {
+	}
+
 	public ScreenDAOImpl(JSONUtil jsonUtil) {
 		this.jsonUtil = jsonUtil;
 	}

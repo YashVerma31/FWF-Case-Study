@@ -3,17 +3,26 @@ package com.yash.moviebookingsystem.serviceimpl;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.log4j.Logger;
+
 import com.yash.moviebookingsystem.dao.ScreenDAO;
+import com.yash.moviebookingsystem.daoimpl.ScreenDAOImpl;
 import com.yash.moviebookingsystem.exception.NullFieldException;
 import com.yash.moviebookingsystem.exception.NullScreenNameException;
 import com.yash.moviebookingsystem.model.Movie;
 import com.yash.moviebookingsystem.model.Row;
 import com.yash.moviebookingsystem.model.Screen;
 import com.yash.moviebookingsystem.service.ScreenService;
+import com.yash.moviebookingsystem.util.OperatorMenu;
 
 public class ScreenServiceImpl implements ScreenService {
 
-	private ScreenDAO screenDAO;
+	private static final Logger LOGGER = Logger.getLogger(OperatorMenu.class);
+
+	private ScreenDAO screenDAO = new ScreenDAOImpl();
+
+	public ScreenServiceImpl() {
+	}
 
 	public ScreenServiceImpl(ScreenDAO screenDAO) {
 		this.screenDAO = screenDAO;
@@ -26,7 +35,7 @@ public class ScreenServiceImpl implements ScreenService {
 		if (ListOfScreen.size() < 3) {
 			for (Screen singleScreen : ListOfScreen) {
 				if (singleScreen.getScreenName().equalsIgnoreCase(screen.getScreenName()))
-					System.out.println("Screen Name Already Exist");
+					LOGGER.info("Screen Name Already Exist");
 				break;
 
 			}
@@ -50,7 +59,7 @@ public class ScreenServiceImpl implements ScreenService {
 			if (screen.getSeatingArrangement() != null) {
 				movieAddedStatus = isScreenExistBeforeAddingTheMovie(screenName, movie, movieAddedStatus, screen);
 			} else {
-				System.out.println("First design Seating for Given Screen : " + screenName);
+				LOGGER.info("First design Seating for Given Screen : " + screenName);
 				break;
 			}
 		}
@@ -70,7 +79,7 @@ public class ScreenServiceImpl implements ScreenService {
 			screen.setMovie(movie);
 			movieAddedStatus = true;
 		} else {
-			System.out.println("Screen not found");
+			LOGGER.info("Screen not found");
 		}
 		return movieAddedStatus;
 	}

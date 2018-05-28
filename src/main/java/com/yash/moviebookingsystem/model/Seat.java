@@ -2,6 +2,11 @@ package com.yash.moviebookingsystem.model;
 
 public class Seat {
 
+	@Override
+	public String toString() {
+		return "Seat [seatNo=" + seatNo + ", available=" + available + "]";
+	}
+
 	private int seatNo;
 	private boolean available;
 

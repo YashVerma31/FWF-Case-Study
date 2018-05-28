@@ -103,14 +103,14 @@ public class ScreenServiceImplTest {
 	}
 
 	@Test
-	public void addSeatingsToScreen_WhenInvalidObjectIsGiven_ShouldNotAddSeatingAndReturnFalse() {
+	public void addSeatsToScreen_WhenInvalidObjectIsGiven_ShouldNotAddSeatingAndReturnFalse() {
 		Map<String, List<Row>> seating = new LinkedHashMap<>();
 		seating.put("gold", new ArrayList<Row>());
 		screenService.addSeatsToScreen(seating, "Audi- 1");
 	}
 
 	@Test
-	public void addSeatingsToScreen_WhenValidObjectAndInValidScreenNameIsGiven_ShouldNotAddSeatingAndReturnFalse() {
+	public void addSeatsToScreen_WhenValidObjectAndInValidScreenNameIsGiven_ShouldNotAddSeatingAndReturnFalse() {
 		Map<String, List<Row>> seating = new LinkedHashMap<>();
 		seating.put("premium", new ArrayList<Row>());
 		seating.put("silver", new ArrayList<Row>());
@@ -121,7 +121,7 @@ public class ScreenServiceImplTest {
 	}
 
 	@Test
-	public void addSeatingsToScreen_WhenValidObjectAndScreenNameIsGiven_ShouldAddSeatingAndReturnTrue() {
+	public void addSeatsToScreen_WhenValidObjectAndScreenNameIsGiven_ShouldAddSeatingAndReturnTrue() {
 		Map<String, List<Row>> seating = new LinkedHashMap<>();
 		seating.put("premium", new ArrayList<Row>());
 		seating.put("silver", new ArrayList<Row>());
